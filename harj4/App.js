@@ -1,33 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View, Pressable, Search, executeSearch} from 'react-native';
+import { useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, Pressable} from 'react-native';
 import Row from './Row';
 import {DATA} from "./Data";
+import Search from "./Search"
 
 
 export default function App() {
+
   const [items, setItems] = useState([]);
-  const [selectedId, setSelectedId] = useState(null); 
-  const select = (id) => {
-    setSelectedId(id);
+
+  useEffect(() => {
+    setItems(DATA);
+  }, [])
+
+  const executeSearch= (search) => {
+    const searchArray = DATA.filter((item) => item.lastname.startsWith(search));
+    setItems(searchArray);
   }
+  
 
   return (
     <SafeAreaView style={styles.container}>
       <Search executeSearch={executeSearch}></Search>
       <FlatList
-      data={DATA}
-      //keyExtractor={(item) => item.id}
-      //extraData={selectedId}
-      renderItem={renderItem}>
+      data={items}
+      renderItem={({item})=>(
+        <Row person={item}></Row>
+      )}>
       </FlatList>
     </SafeAreaView>
   )
 }
 
-function renderItem({item}){
-  return(<Text>{item.lastname}</Text>)
-}
+
 
 const styles = StyleSheet.create({
   container: {

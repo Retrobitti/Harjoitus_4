@@ -75,4 +75,4 @@ export const DATA = [
         firstname:"Jorma"
     }
     
-]
+];
